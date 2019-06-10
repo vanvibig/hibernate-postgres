@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,6 +19,11 @@ public class QuestionController {
     @GetMapping("/hello")
     public String hello() {
         return "World";
+    }
+
+    public void demoException() throws Exception {
+        // do something
+        throw new Exception("demo throw exception");
     }
 
     @Autowired
@@ -35,12 +41,16 @@ public class QuestionController {
      * localhost:8080/questions/
      */
     @PostMapping()
-    public Question createQuestion(@Valid @RequestBody Question question) {
-        return questionRepository.save(question);
+    @Transactional(rollbackFor = Exception.class)
+    public Question createQuestion(@Valid @RequestBody Question question) throws Exception {
+        Question res;
+        res = questionRepository.save(question);
+        demoException();
+        return res;
     }
 
     @PutMapping("/{questionId}")
-    public Question udpateQuestion(@PathVariable Long questionId,
+    public Question uppateQuestion(@PathVariable Long questionId,
                                    @Valid @RequestBody Question questionRequest) {
         return questionRepository.findById(questionId)
                 .map(question -> {
