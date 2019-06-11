@@ -1,0 +1,52 @@
+package com.example.hibernatepostgres.service;
+
+import com.example.hibernatepostgres.exception.ResourceNotFoundException;
+import com.example.hibernatepostgres.model.Question;
+import com.example.hibernatepostgres.repository.QuestionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+
+@Service
+public class QuestionService {
+
+    @Autowired
+    private QuestionRepository questionRepository;
+
+    @Transactional(readOnly = true)
+    public Page<Question> getQuestion(Pageable pageable) {
+        return questionRepository.findAll(pageable);
+    }
+
+    @Transactional(readOnly = false)
+    public Question createQuestion(Question question) {
+        return questionRepository.save(question);
+    }
+
+    @Transactional(readOnly = false)
+    public Question updateQuestion(Long questionId, Question questionRequest) {
+        return questionRepository.findById(questionId)
+                .map(question -> {
+                    question.setTitle(questionRequest.getTitle());
+                    question.setDescription(questionRequest.getDescription());
+                    return questionRepository.save(question);
+                }).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Question not found with id %b", questionId))
+        );
+    }
+
+    @Transactional(readOnly = false)
+    public ResponseEntity<Object> deleteQuestion(@PathVariable Long questionId) {
+        return questionRepository.findById(questionId)
+                .map(question -> {
+                    questionRepository.delete(question);
+                    return ResponseEntity.ok().build();
+                }).orElseThrow(
+                        () -> new ResourceNotFoundException(String.format("Question not found with id %b", questionId))
+                );
+    }
+}

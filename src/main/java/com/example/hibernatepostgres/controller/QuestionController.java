@@ -1,8 +1,7 @@
 package com.example.hibernatepostgres.controller;
 
-import com.example.hibernatepostgres.exception.ResourceNotFoundException;
 import com.example.hibernatepostgres.model.Question;
-import com.example.hibernatepostgres.repository.QuestionRepository;
+import com.example.hibernatepostgres.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +13,9 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/questions")
+/**
+ * cache level 1, 2, transaction noted
+ */
 public class QuestionController {
 
     @GetMapping("/hello")
@@ -27,14 +29,14 @@ public class QuestionController {
     }
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private QuestionService questionService;
 
     /**
      * localhost:8080/questions?page=0&size=2&sort=createdAt,desc
      */
     @GetMapping()
     public Page<Question> getQuestions(Pageable pageable) {
-        return questionRepository.findAll(pageable);
+        return questionService.getQuestion(pageable);
     }
 
     /**
@@ -42,34 +44,18 @@ public class QuestionController {
      */
     @PostMapping()
     @Transactional(rollbackFor = Exception.class)
-    public Question createQuestion(@Valid @RequestBody Question question) throws Exception {
-        Question res;
-        res = questionRepository.save(question);
-        demoException();
-        return res;
+    public Question createQuestion(@Valid @RequestBody Question question) {
+        return questionService.createQuestion(question);
     }
 
     @PutMapping("/{questionId}")
-    public Question uppateQuestion(@PathVariable Long questionId,
+    public Question updateQuestion(@PathVariable Long questionId,
                                    @Valid @RequestBody Question questionRequest) {
-        return questionRepository.findById(questionId)
-                .map(question -> {
-                    question.setTitle(questionRequest.getTitle());
-                    question.setDescription(questionRequest.getDescription());
-                    return questionRepository.save(question);
-                }).orElseThrow(
-                        () -> new ResourceNotFoundException(String.format("Question not found with id %b", questionId))
-                );
+        return questionService.updateQuestion(questionId, questionRequest);
     }
 
     @DeleteMapping("/{questionId}")
     public ResponseEntity<?> deleteQuestion(@PathVariable Long questionId) {
-        return questionRepository.findById(questionId)
-                .map(question -> {
-                    questionRepository.delete(question);
-                    return ResponseEntity.ok().build();
-                }).orElseThrow(
-                        () -> new ResourceNotFoundException(String.format("Question not found with id %b", questionId))
-                );
+        return questionService.deleteQuestion(questionId);
     }
 }
