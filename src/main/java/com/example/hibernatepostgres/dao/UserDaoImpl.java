@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -20,6 +21,7 @@ public class UserDaoImpl implements UserDao {
     private EntityManagerFactory entityManagerFactory;
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> getUserDetails() {
         Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
 
@@ -31,6 +33,7 @@ public class UserDaoImpl implements UserDao {
         return session.createQuery(criteriaQuery).getResultList();
     }
 
+    @Transactional(readOnly = true)
     public List<User> getUserDetailsByCriteria() {
         Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
 
