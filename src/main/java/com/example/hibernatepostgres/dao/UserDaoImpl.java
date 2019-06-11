@@ -1,6 +1,7 @@
 package com.example.hibernatepostgres.dao;
 
 import com.example.hibernatepostgres.model.User;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,20 @@ public class UserDaoImpl implements UserDao {
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root contactRoot = criteriaQuery.from(User.class);
+        criteriaQuery.select(contactRoot);
+
+        return session.createQuery(criteriaQuery).getResultList();
+    }
+
+    public List<User> getUserDetailsByCriteria() {
+        Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(User.class);
+
+        Root<User> contactRoot = criteriaQuery.from(User.class);
+        criteriaQuery.where(criteriaBuilder.lt(contactRoot.get("id"), 4));
+
         criteriaQuery.select(contactRoot);
 
         return session.createQuery(criteriaQuery).getResultList();

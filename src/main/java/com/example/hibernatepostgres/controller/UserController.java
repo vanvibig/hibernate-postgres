@@ -26,6 +26,12 @@ public class UserController {
         return new ResponseEntity<>(usersDetail, HttpStatus.OK);
     }
 
+    @GetMapping("/criteria")
+    public ResponseEntity<?> userDetailsByCriteria() {
+        List usersDetail = userService.getUserDetailsByCriteria();
+        return new ResponseEntity<>(usersDetail, HttpStatus.OK);
+    }
+
     @PostMapping()
     public ResponseEntity<?> createUser(@RequestBody User user) {
         User res = userService.createUser(user);

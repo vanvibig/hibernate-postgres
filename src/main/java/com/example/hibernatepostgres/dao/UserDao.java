@@ -11,4 +11,6 @@ public interface UserDao {
     List getUserDetails();
 
     User createUser(User user);
+
+    List getUserDetailsByCriteria();
 }

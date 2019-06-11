@@ -9,4 +9,6 @@ public interface UserService {
     List getUserDetails();
 
     User createUser(User user);
+
+    List getUserDetailsByCriteria();
 }
