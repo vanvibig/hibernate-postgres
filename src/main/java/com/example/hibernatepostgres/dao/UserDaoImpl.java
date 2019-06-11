@@ -1,7 +1,6 @@
 package com.example.hibernatepostgres.dao;
 
 import com.example.hibernatepostgres.model.User;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
@@ -37,8 +37,19 @@ public class UserDaoImpl implements UserDao {
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(User.class);
 
-        Root<User> contactRoot = criteriaQuery.from(User.class);
-        criteriaQuery.where(criteriaBuilder.lt(contactRoot.get("id"), 4));
+        Root<?> contactRoot = criteriaQuery.from(User.class);
+
+        Predicate ltPredicate = criteriaBuilder.lt(contactRoot.get("id"), 6);
+        Predicate nePredicate = criteriaBuilder.notEqual(contactRoot.get("id"), 3);
+        Predicate btPredicate = criteriaBuilder.between(contactRoot.get("id"), 2, 4);
+
+        criteriaQuery.where(ltPredicate, nePredicate, btPredicate);
+
+//                .where(criteriaBuilder.notEqual(contactRoot.get("id"), 3))
+//                .where(criteriaBuilder.between(contactRoot.get("id"), 2, 4));
+//        criteriaQuery.where(criteriaBuilder.between(contactRoot.get("id"), 2, 4));
+
+
 
         criteriaQuery.select(contactRoot);
 
