@@ -1,6 +1,7 @@
-package com.example.hibernatepostgres.dao;
+package com.example.hibernatepostgres.repository.impl;
 
 import com.example.hibernatepostgres.model.User;
+import com.example.hibernatepostgres.repository.UserRepositoryCustom;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
-public class UserDaoImpl implements UserDao {
+public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;

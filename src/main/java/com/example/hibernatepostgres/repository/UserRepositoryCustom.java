@@ -1,12 +1,10 @@
-package com.example.hibernatepostgres.dao;
+package com.example.hibernatepostgres.repository;
 
 import com.example.hibernatepostgres.model.User;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public interface UserDao {
+public interface UserRepositoryCustom {
 
     List getUserDetails();
 
