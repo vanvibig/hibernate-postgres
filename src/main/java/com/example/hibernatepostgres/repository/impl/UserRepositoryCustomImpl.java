@@ -22,7 +22,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     private EntityManagerFactory entityManagerFactory;
 
     @Override
-    @Transactional(readOnly = true)
     public List<User> getUserDetails() {
         Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
 
@@ -47,12 +46,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         Predicate btPredicate = criteriaBuilder.between(contactRoot.get("id"), 2, 4);
 
         criteriaQuery.where(ltPredicate, nePredicate, btPredicate);
-
-//                .where(criteriaBuilder.notEqual(contactRoot.get("id"), 3))
-//                .where(criteriaBuilder.between(contactRoot.get("id"), 2, 4));
-//        criteriaQuery.where(criteriaBuilder.between(contactRoot.get("id"), 2, 4));
-
-
 
         criteriaQuery.select(contactRoot);
 
