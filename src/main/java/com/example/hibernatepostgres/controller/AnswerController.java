@@ -4,6 +4,7 @@ import com.example.hibernatepostgres.model.Answer;
 import com.example.hibernatepostgres.service.AnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,6 +18,7 @@ public class AnswerController {
     private AnswerService answerService;
 
     @GetMapping("/{questionId}/answers")
+    @Transactional(readOnly = true)
     public List<Answer> getAnswersByQuestionId(@PathVariable Long questionId) {
         return answerService.getAnswersByQuestionId(questionId);
     }

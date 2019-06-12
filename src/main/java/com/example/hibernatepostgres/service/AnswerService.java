@@ -7,7 +7,6 @@ import com.example.hibernatepostgres.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
@@ -24,12 +23,10 @@ public class AnswerService {
     @Autowired
     private EntityManagerFactory entityManagerFactory;
 
-    @Transactional(readOnly = true)
     public List<Answer> getAnswersByQuestionId(Long questionId) {
         return answerRepository.findByQuestionId(questionId);
     }
 
-    @Transactional(readOnly = false)
     public Answer addAnswer(Long questionId, Answer answer) {
         return questionRepository.findById(questionId)
                 .map(question -> {
@@ -40,7 +37,6 @@ public class AnswerService {
                 );
     }
 
-    @Transactional(readOnly = false)
     public Answer updateAnswer(Long questionId,
                                Long answerId,
                                Answer answerRequest) {
@@ -57,7 +53,6 @@ public class AnswerService {
                 );
     }
 
-    @Transactional(readOnly = false)
     public ResponseEntity<?> deleteAnswer(Long questionId,
                                           Long answerId) {
         if (!questionRepository.existsById(questionId)) {

@@ -35,6 +35,7 @@ public class QuestionController {
      * localhost:8080/questions?page=0&size=2&sort=createdAt,desc
      */
     @GetMapping()
+    @Transactional(readOnly = true)
     public Page<Question> getQuestions(Pageable pageable) {
         return questionService.getQuestion(pageable);
     }

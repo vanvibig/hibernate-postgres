@@ -1,7 +1,8 @@
-package com.example.hibernatepostgres.service;
+package com.example.hibernatepostgres.service.impl;
 
 import com.example.hibernatepostgres.model.User;
 import com.example.hibernatepostgres.repository.UserRepository;
+import com.example.hibernatepostgres.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserBYId(int id) {
+        System.out.println(String.format("get user by id %d",id));
         return userRepository.findById(id).get();
     }
 }

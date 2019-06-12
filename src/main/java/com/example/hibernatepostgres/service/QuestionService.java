@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
@@ -17,17 +16,14 @@ public class QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    @Transactional(readOnly = true)
     public Page<Question> getQuestion(Pageable pageable) {
         return questionRepository.findAll(pageable);
     }
 
-    @Transactional(readOnly = false)
     public Question createQuestion(Question question) {
         return questionRepository.save(question);
     }
 
-    @Transactional(readOnly = false)
     public Question updateQuestion(Long questionId, Question questionRequest) {
         return questionRepository.findById(questionId)
                 .map(question -> {
@@ -39,7 +35,6 @@ public class QuestionService {
         );
     }
 
-    @Transactional(readOnly = false)
     public ResponseEntity<Object> deleteQuestion(@PathVariable Long questionId) {
         return questionRepository.findById(questionId)
                 .map(question -> {

@@ -34,7 +34,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         return session.createQuery(criteriaQuery).getResultList();
     }
 
-    @Transactional(readOnly = true)
     public List<User> getUserDetailsByCriteria() {
         Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
 
