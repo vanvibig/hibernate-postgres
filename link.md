@@ -11,3 +11,7 @@ https://www.baeldung.com/hibernate-criteria-queries
 https://www.baeldung.com/hibernate-named-query
 
 https://dzone.com/articles/add-custom-functionality-to-a-spring-data-reposito
+
+https://howtodoinjava.com/spring-boot2/spring-boot-cache-example/
+
+https://www.youtube.com/watch?v=CFZtN8hNtk8

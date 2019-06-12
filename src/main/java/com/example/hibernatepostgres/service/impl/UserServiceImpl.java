@@ -6,10 +6,10 @@ import com.example.hibernatepostgres.service.UserService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManagerFactory;
-import java.io.Serializable;
 import java.util.List;
 
 @Service
@@ -37,16 +37,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable("cache-level2")
     public User getUserBYId(int id) {
-        System.out.println(String.format("get user by id %d",id));
+        System.out.println(String.format("get user by id %d", id));
         return userRepository.findById(id).get();
     }
 
     @Override
-    public User getUserInCache(Class<?> theClass, Serializable id) {
-        Session session = entityManagerFactory.unwrap(SessionFactory.class).getCurrentSession();
-        User user = (User) session.load(User.class, 1);
-        System.out.println(user.getEmail());
-        return user;
+    public User getUserInCache(Class<?> theClass, Integer id) {
+        int i = 5;
+        while (i > 0) {
+            Session session = entityManagerFactory.unwrap(SessionFactory.class).getCurrentSession();
+            User user = session.load(User.class, id);
+            System.out.println(user.getEmail());
+//            session.evict(user);
+            i--;
+        }
+        return null;
     }
 }

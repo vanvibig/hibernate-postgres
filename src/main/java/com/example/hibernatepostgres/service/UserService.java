@@ -2,7 +2,6 @@ package com.example.hibernatepostgres.service;
 
 import com.example.hibernatepostgres.model.User;
 
-import java.io.Serializable;
 import java.util.List;
 
 public interface UserService {
@@ -15,5 +14,5 @@ public interface UserService {
 
     User getUserBYId(int id);
 
-    User getUserInCache(Class<?> theClass, Serializable id);
+    User getUserInCache(Class<?> theClass, Integer id);
 }
