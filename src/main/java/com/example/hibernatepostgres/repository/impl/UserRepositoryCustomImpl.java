@@ -36,20 +36,20 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     public List<User> getUserDetailsByCriteria() {
         Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
 
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(User.class);
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery criteria = builder.createQuery(User.class);
 
-        Root<?> contactRoot = criteriaQuery.from(User.class);
+        Root<?> contactRoot = criteria.from(User.class);
 
-        Predicate ltPredicate = criteriaBuilder.lt(contactRoot.get("id"), 6);
-        Predicate nePredicate = criteriaBuilder.notEqual(contactRoot.get("id"), 3);
-        Predicate btPredicate = criteriaBuilder.between(contactRoot.get("id"), 2, 4);
+        Predicate ltPredicate = builder.lt(contactRoot.get("id"), 6);
+        Predicate nePredicate = builder.notEqual(contactRoot.get("id"), 3);
+        Predicate btPredicate = builder.between(contactRoot.get("id"), 2, 4);
 
-        criteriaQuery.where(ltPredicate, nePredicate, btPredicate);
+        criteria.where(ltPredicate, nePredicate, btPredicate);
 
-        criteriaQuery.select(contactRoot);
+        criteria.select(contactRoot);
 
-        return session.createQuery(criteriaQuery).getResultList();
+        return session.createQuery(criteria).getResultList();
     }
 
     @Override
