@@ -23,5 +23,7 @@ if resp.status_code != 200:
     # This means something went wrong.
    print('Error when GET /users/ {}'.format(resp.status_code))
 
-for user in resp.json():
-    print(json.dumps(user, indent=4))
+print(json.dumps(resp.json(), indent=4))
+
+# for user in resp.json():
+#     print(json.dumps(user, indent=4))
